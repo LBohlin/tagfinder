@@ -6,7 +6,9 @@ class Mapping:
         self.data = dict()
         locations = subprocess.run(["find", path, "-name", "stats.txt"], capture_output=True).stdout.decode("utf-8")
         
-        for e in locations.split('\n'):
+        objects = list(filter(None,locations.split('\n')))
+        self.numberOfObjects = len(objects)
+        for e in objects:
             if len(e) > 0:                
                 p = Path(e)
                 picpath = p.parent.joinpath("pic")
