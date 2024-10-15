@@ -3,7 +3,7 @@ from PIL import ImageTk, Image
 from pathlib import Path
 
 import mapping
-dummypic = "/home/user/Documents/Projekte/Image/error.jpeg"
+
 root = Tk()
 root.title("Using Pack")
 root.geometry("1000x600")  # set starting size of window
@@ -30,9 +30,9 @@ def searchFunction():
     imageList = []
 
     labels = []
-    for obj in m.data:                
-        if x in obj.k:
-            for p in obj.pics:
+    for k in m.data.keys():                
+        if x in k:
+            for p in m.data[k]:
                 imageList.append(p)    
     r = 0
     c = 0
@@ -41,9 +41,8 @@ def searchFunction():
             c = 0
             r = r + 1
         ppath = Path(img).parent        
-        if not img.exists():
-            global dummypic
-            img = Path(dummypic)
+        if not img.exists():            
+            img = Path("/home/user/Documents/Projekte/Image/error.jpeg")
         temp = Image.open(img)
         temp = temp.resize((150, 100))
         image = ImageTk.PhotoImage(temp)                
