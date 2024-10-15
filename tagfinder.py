@@ -64,7 +64,7 @@ def searchFunction():
                 foundKeywords.append(k)
         if len(foundKeywords) > 0:
             # number of pictures NOT of keywords!!
-            desc = sk + ":"+ str(len(sublist)) + '('
+            desc = sk + ": "+ str(len(sublist)) + ' ('
             for k in foundKeywords:
                 desc = desc + k[:-1] + ', '        
             desc = desc[:-2] + ')'
@@ -93,11 +93,12 @@ def searchFunction():
         image = ImageTk.PhotoImage(temp)                
         pictures.append(image)        
         label = Label(canvas, text=str(ppath).replace(m.basePath,"")[1:], image=image, compound='top')
+        label.pack()
         canvas.create_window(x,y,window=label, anchor=N+W)
         labels.append(label)
         x = x + int(relative*height) +dist
-    metadesc.append("Keywörter:" + str(len(m.data.keys())))
-    metadesc.append("Anzahl Objekte:" + str(m.numberOfObjects))
+    metadesc.append("Keywörter ges: " + str(len(m.data.keys())))
+    metadesc.append("Anzahl Objekte ges: " + str(m.numberOfObjects))
     for md in metadesc:    
         label = Label(infoFrame, text=md)
         label.pack()
@@ -108,8 +109,9 @@ def searchFunction():
 searchEntry = Entry(searchFrame, bd=3)
 searchEntry.pack()
 
-searchbutton = Button(searchFrame, text="search", command=searchFunction)
-searchbutton.pack()
+searchButton = Button(searchFrame, text="search", command=searchFunction)
+searchButton.pack()
+root.bind('<Return>', lambda enter: searchButton.invoke())
 
 #m.printdata()
 
