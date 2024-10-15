@@ -5,7 +5,7 @@ from pathlib import Path
 import mapping
 
 root = Tk()
-root.title("Using Pack")
+root.title("tagfinder")
 root.geometry("1200x600")  # set starting size of window
 root.config(bg="skyblue")
 
@@ -15,8 +15,6 @@ searchFrame.pack(side='top')
 canvas = Canvas(root, height=800, width=600, background="lightblue")
                  
 canvas.pack(expand=True, fill=BOTH)
-#canvas.pack()
-
 
 vbar = Scrollbar(canvas, orient = VERTICAL)
 vbar.pack(side = RIGHT, fill = Y)
@@ -26,8 +24,18 @@ canvas.config(yscrollcommand=vbar.set)
 
 infoFrame = Frame(canvas, width = 50, height = 100, bg='grey')
 infoFrame.pack(side='right')
+configpath = Path("./config.txt")
 
-m = mapping.Mapping("/home/user/Documents/Projekte/Image/test")
+if  (not configpath.exists()) or (not Path("./error.jpeg").exists()):
+    print("Wrong working directory, config or error.jpeg missing.")
+    exit(1)
+    
+f = open(configpath, "r")
+config = f.readline()
+config = config.replace('\n','')
+f.close()
+
+m = mapping.Mapping(config)
 pictures = []
 labels = []
 
@@ -46,7 +54,6 @@ def searchFunction():
     metadesc = []
     searchKeys=filter(None, searchKeys)
     for sk in searchKeys:
-        print(sk)
         sublist = set()
         foundKeywords = []
         for k in m.data.keys():            
@@ -76,7 +83,7 @@ def searchFunction():
             
         ppath = Path(img).parent        
         if not img.exists():            
-            img = Path("/home/user/Documents/Projekte/Image/error.jpeg")
+            img = Path("./error.jpeg")
         temp = Image.open(img)
         relative = temp.width/temp.height
         
@@ -94,14 +101,13 @@ def searchFunction():
         label.pack()
         labels.append(label)
     root.update()
-    print(canvas.bbox('all'))
     canvas.configure(scrollregion = (canvas.bbox('all')))
 
 searchEntry = Entry(searchFrame, bd=3)
-searchEntry.pack()#grid(row=0, column=0)
+searchEntry.pack()
 
 searchbutton = Button(searchFrame, text="search", command=searchFunction)
-searchbutton.pack()#grid(row=0, column=1)
+searchbutton.pack()
 
 #m.printdata()
 

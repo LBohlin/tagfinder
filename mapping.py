@@ -5,9 +5,7 @@ class Mapping:
     def __init__(self, path):
         self.data = dict()
         self.basePath=path
-        print(self.basePath)
         locations = subprocess.run(["find", path, "-name", "info.txt"], capture_output=True).stdout.decode("utf-8")
-        
         objects = list(filter(None,locations.split('\n')))
         self.numberOfObjects = len(objects)
         for e in objects:
@@ -34,7 +32,3 @@ class Mapping:
         for k in self.data.keys():
             print(k)
             print(self.data[k])
-
-            
-#m = Mapping("/home/user/Documents/Projekte/Image/test")
-#m.printdata()
