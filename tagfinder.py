@@ -41,7 +41,7 @@ labels = []
 
 def searchFunction():
     global canvas, root
-    searchKeys = searchEntry.get().split(' ')
+    searchKeys = searchEntry.get().lower().split(' ')
     if len(list(filter(None,searchKeys))) < 1:
         return
     global labels
@@ -52,8 +52,9 @@ def searchFunction():
     labels = []
     metalist = []
     metadesc = []
-    searchKeys=filter(None, searchKeys)
-    for sk in searchKeys:
+    imageSet = {}
+    searchKeys=list(filter(None, searchKeys))
+    for sk in searchKeys:        
         sublist = set()
         foundKeywords = []
         for k in m.data.keys():            
@@ -61,14 +62,15 @@ def searchFunction():
                 for p in m.data[k]:
                     sublist.add(p)
                 foundKeywords.append(k)
-        # number of pictures NOT of keywords!!        
-        desc = sk + ":"+ str(len(sublist)) + '('
-        for k in foundKeywords:
-            desc = desc + k[:-1] + ', '        
-        desc = desc[:-2] + ')'
-        metadesc.append(desc)
-        metalist.append(sublist)
-    imageSet = set.intersection(*metalist)
+        if len(foundKeywords) > 0:
+            # number of pictures NOT of keywords!!
+            desc = sk + ":"+ str(len(sublist)) + '('
+            for k in foundKeywords:
+                desc = desc + k[:-1] + ', '        
+            desc = desc[:-2] + ')'
+            metadesc.append(desc)
+            metalist.append(sublist)
+            imageSet = set.intersection(*metalist)
     
     x = 0
     y = 0

@@ -25,6 +25,7 @@ class Mapping:
                         else:
                             s = set()
                             s.add(picpath)
+                            l.lower()
                             self.data[l] = s
 
     def printdata(self):
