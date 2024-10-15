@@ -6,24 +6,36 @@ import mapping
 
 root = Tk()
 root.title("Using Pack")
-root.geometry("1000x600")  # set starting size of window
+root.geometry("1200x600")  # set starting size of window
 root.config(bg="skyblue")
 
 searchFrame = Frame(root, width=0, height=10, bg="#6FAFE7")
-#searchFrame.grid(row=0, column=0)
-searchFrame.pack()
-pictureFrame = Frame(root, width=200, height=400, bg='grey')
-pictureFrame.pack(side='top')#.grid(row=1, column=0, padx=10, pady=5)
-infoFrame = Frame(pictureFrame, width = 50, height = 100, bg='grey')
+searchFrame.pack(side='top')
+
+canvas = Canvas(root, height=800, width=600, background="lightblue")
+                 
+canvas.pack(expand=True, fill=BOTH)
+#canvas.pack()
+
+
+vbar = Scrollbar(canvas, orient = VERTICAL)
+vbar.pack(side = RIGHT, fill = Y)
+vbar.config(command = canvas.yview)
+canvas.config(yscrollcommand=vbar.set)
+
+
+infoFrame = Frame(canvas, width = 50, height = 100, bg='grey')
 infoFrame.pack(side='right')
-#scale = Scale(master=root, orient=VERTICAL, from_=1, to=len(imageList)/8, resolution=1, showvalue=False, command=toFrame)
-#scale.grid(row=1, column=1)
+
 m = mapping.Mapping("/home/user/Documents/Projekte/Image/test")
 pictures = []
 labels = []
+
 def searchFunction():
+    global canvas, root
     searchKeys = searchEntry.get().split(' ')
-    #x = searchEntry.get()
+    if len(list(filter(None,searchKeys))) < 1:
+        return
     global labels
     for l in labels:        
         l.destroy()
@@ -49,45 +61,47 @@ def searchFunction():
         desc = desc[:-2] + ')'
         metadesc.append(desc)
         metalist.append(sublist)
-    print(metadesc)
     imageSet = set.intersection(*metalist)
-    print(imageSet)
-    r = 0
-    c = 0
+    
+    x = 0
+    y = 0
+    height = 150
+    dist = 70
+    maxwidth = 800
+    
     for img in imageSet:        
-        if c > 3:
-            c = 0
-            r = r + 1
+        if x > maxwidth:
+            y = y + height + dist
+            x = 0
+            
         ppath = Path(img).parent        
         if not img.exists():            
             img = Path("/home/user/Documents/Projekte/Image/error.jpeg")
         temp = Image.open(img)
         relative = temp.width/temp.height
-        height = 150
+        
         temp = temp.resize((int(relative*height), height))
         image = ImageTk.PhotoImage(temp)                
-        pictures.append(image)                       
-        label = Label(pictureFrame, text=ppath, image=image, compound='top')
-        label.pack()
-        #label.grid(row=r, column=c, padx=1, pady=1)
+        pictures.append(image)        
+        label = Label(canvas, text=str(ppath).replace(m.basePath,"")[1:], image=image, compound='top')
+        canvas.create_window(x,y,window=label, anchor=N+W)
         labels.append(label)
-        c = c + 1
-    #print(m.data.keys())
+        x = x + int(relative*height) +dist
     metadesc.append("Keywörter:" + str(len(m.data.keys())))
     metadesc.append("Anzahl Objekte:" + str(m.numberOfObjects))
     for md in metadesc:    
         label = Label(infoFrame, text=md)
         label.pack()
         labels.append(label)
-    
-    pictureFrame.update()
+    root.update()
+    print(canvas.bbox('all'))
+    canvas.configure(scrollregion = (canvas.bbox('all')))
 
 searchEntry = Entry(searchFrame, bd=3)
 searchEntry.pack()#grid(row=0, column=0)
 
 searchbutton = Button(searchFrame, text="search", command=searchFunction)
 searchbutton.pack()#grid(row=0, column=1)
-
 
 #m.printdata()
 

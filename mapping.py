@@ -4,7 +4,9 @@ from pathlib import Path
 class Mapping:    
     def __init__(self, path):
         self.data = dict()
-        locations = subprocess.run(["find", path, "-name", "stats.txt"], capture_output=True).stdout.decode("utf-8")
+        self.basePath=path
+        print(self.basePath)
+        locations = subprocess.run(["find", path, "-name", "info.txt"], capture_output=True).stdout.decode("utf-8")
         
         objects = list(filter(None,locations.split('\n')))
         self.numberOfObjects = len(objects)
