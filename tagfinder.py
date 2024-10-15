@@ -112,7 +112,7 @@ searchEntry.pack()
 searchButton = Button(searchFrame, text="search", command=searchFunction)
 searchButton.pack()
 root.bind('<Return>', lambda enter: searchButton.invoke())
-
+searchEntry.focus_set()
 #m.printdata()
 
 
