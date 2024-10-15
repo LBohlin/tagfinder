@@ -14,6 +14,8 @@ class Mapping:
                     f = open(p, "r")
                     lines = f.readlines()
                     for l in lines:
+                        if l[0] == '#':
+                            continue
                         if l in self.data:
                             s = self.data.get(l)
                             s.add(picpath)
