@@ -46,7 +46,8 @@ class Mapping:
                 for k in foundKeywords:
                     desc = desc + k[:-1] + ', '        
                     desc = desc[:-2] + ')'
-                    metadesc.append(desc)
+                    if not sk == '*':
+                        metadesc.append(desc)
                     metalist.append(sublist)
                     imageSet = set.intersection(*metalist)
         return [imageSet, metadesc]
