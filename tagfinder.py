@@ -78,7 +78,9 @@ def searchFunction():
     height = 150
     dist = 70
     maxwidth = 800
-    
+    #grid
+    grow = 0
+    gcol = 0
     for img in imageSet:        
         if x > maxwidth:
             y = y + height + dist
@@ -93,11 +95,15 @@ def searchFunction():
         temp = temp.resize((int(relative*height), height))
         image = ImageTk.PhotoImage(temp)                
         pictures.append(image)        
-        label = Label(canvas, text=str(ppath).replace(m.basePath,"")[1:], image=image, compound='top')
+        label = Label(canvas, text=str(ppath).replace(m.basePath,"")[1:], image=image, compound='top')        
         label.pack()
-        canvas.create_window(x,y,window=label, anchor=N+W)
+        canvas.create_window(x,y,window=label, anchor=NW)
+        #root.update()
+        wdth=label.winfo_reqwidth()
+
+        print(wdth)
         labels.append(label)
-        x = x + int(relative*height) +dist
+        x = x + wdth
     metadesc.append("Keywörter ges: " + str(len(m.data.keys())))
     metadesc.append("Anzahl Objekte ges: " + str(m.numberOfObjects))
     for md in metadesc:    
