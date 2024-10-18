@@ -51,36 +51,15 @@ def searchFunction():
     global pictures
     pictures = []
     labels = []
-    metalist = []
-    metadesc = []
-    imageSet = {}
-    searchKeys=list(filter(None, searchKeys))
-    for sk in searchKeys:        
-        sublist = set()
-        foundKeywords = []
-        for k in m.data.keys():            
-            if sk == '*' or sk in k:
-                for p in m.data[k]:
-                    sublist.add(p)
-                foundKeywords.append(k)
-        if len(foundKeywords) > 0:
-            # number of pictures NOT of keywords!!
-            desc = sk + ": "+ str(len(sublist)) + ' ('
-            for k in foundKeywords:
-                desc = desc + k[:-1] + ', '        
-            desc = desc[:-2] + ')'
-            metadesc.append(desc)
-            metalist.append(sublist)
-            imageSet = set.intersection(*metalist)
-    
+
+    ret = m.search(searchKeys)
+    imageSet = ret[0]
+    metadesc = ret[1]
     x = 0
     y = 0
     height = 150
     dist = 70
     maxwidth = 800
-    #grid
-    grow = 0
-    gcol = 0
     for img in imageSet:        
         if x > maxwidth:
             y = y + height + dist
@@ -98,10 +77,7 @@ def searchFunction():
         label = Label(canvas, text=str(ppath).replace(m.basePath,"")[1:], image=image, compound='top')        
         label.pack()
         canvas.create_window(x,y,window=label, anchor=NW)
-        #root.update()
         wdth=label.winfo_reqwidth()
-
-        print(wdth)
         labels.append(label)
         x = x + wdth
     metadesc.append("Keywörter ges: " + str(len(m.data.keys())))

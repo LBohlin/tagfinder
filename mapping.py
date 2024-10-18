@@ -27,6 +27,30 @@ class Mapping:
                             s.add(picpath)                            
                             self.data[l.lower()] = s
 
+    def search(self, searchKeys):
+        metalist = []
+        metadesc = []
+        imageSet = {}
+        searchKeys=list(filter(None, searchKeys))
+        for sk in searchKeys:        
+            sublist = set()
+            foundKeywords = []
+            for k in self.data.keys():            
+                if sk == '*' or sk in k:
+                    for p in self.data[k]:
+                        sublist.add(p)
+                    foundKeywords.append(k)
+            if len(foundKeywords) > 0:
+                # number of pictures NOT of keywords!!
+                desc = sk + ": "+ str(len(sublist)) + ' ('
+                for k in foundKeywords:
+                    desc = desc + k[:-1] + ', '        
+                    desc = desc[:-2] + ')'
+                    metadesc.append(desc)
+                    metalist.append(sublist)
+                    imageSet = set.intersection(*metalist)
+        return [imageSet, metadesc]
+                
     def printdata(self):
         print("printdata")
         for k in self.data.keys():
