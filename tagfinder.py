@@ -44,6 +44,7 @@ def searchFunction():
     searchKeys = searchEntry.get().lower().split(' ')
     if len(list(filter(None,searchKeys))) < 1:
         return
+    
     global labels
     for l in labels:        
         l.destroy()
@@ -58,7 +59,7 @@ def searchFunction():
         sublist = set()
         foundKeywords = []
         for k in m.data.keys():            
-            if sk in k:
+            if sk == '*' or sk in k:
                 for p in m.data[k]:
                     sublist.add(p)
                 foundKeywords.append(k)
