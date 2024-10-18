@@ -24,9 +24,8 @@ class Mapping:
                             self.data[l] = s
                         else:
                             s = set()
-                            s.add(picpath)
-                            l.lower()
-                            self.data[l] = s
+                            s.add(picpath)                            
+                            self.data[l.lower()] = s
 
     def printdata(self):
         print("printdata")
