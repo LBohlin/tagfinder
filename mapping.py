@@ -16,6 +16,7 @@ class Mapping:
                     f = open(p, "r")
                     lines = f.readlines()
                     for l in lines:
+                        l = l.lower()
                         if l[0] == '#':
                             continue
                         if l in self.data:
@@ -25,7 +26,7 @@ class Mapping:
                         else:
                             s = set()
                             s.add(picpath)                            
-                            self.data[l.lower()] = s
+                            self.data[l] = s
 
     def search(self, searchKeys):
         metalist = []
