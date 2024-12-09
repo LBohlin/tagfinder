@@ -13,7 +13,7 @@ searchFrame = Frame(root, width=0, height=10, bg="#6FAFE7")
 searchFrame.pack(side='top')
 
 canvas = Canvas(root, height=800, width=600, background="lightblue")
-                 
+
 canvas.pack(expand=True, fill=BOTH)
 
 vbar = Scrollbar(canvas, orient = VERTICAL)
@@ -22,8 +22,8 @@ vbar.config(command = canvas.yview)
 canvas.config(yscrollcommand=vbar.set)
 
 
-infoFrame = Frame(canvas, width = 50, height = 100, bg='grey')
-infoFrame.pack(side='right')
+#infoFrame = Frame(canvas, width = 50, height = 100, bg='grey')
+#infoFrame.pack(side='right')
 configpath = Path("./config.txt")
 
 if  (not configpath.exists()) or (not Path("./error.jpeg").exists()):
@@ -38,6 +38,14 @@ f.close()
 m = mapping.Mapping(config)
 pictures = []
 labels = []
+def on_mousewheel(event):    
+    if event.num == 4:
+        direction = -1
+    else:
+        direction = 1
+    canvas.yview_scroll(direction, "units")
+root.bind("<Button-4>", on_mousewheel)
+root.bind("<Button-5>", on_mousewheel)
 
 def searchFunction():
     global canvas, root
@@ -80,12 +88,12 @@ def searchFunction():
         wdth=label.winfo_reqwidth()
         labels.append(label)
         x = x + wdth
-    metadesc.append("Keywörter ges: " + str(len(m.data.keys())))
-    metadesc.append("Anzahl Objekte ges: " + str(m.numberOfObjects))
-    for md in metadesc:    
-        label = Label(infoFrame, text=md)
-        label.pack()
-        labels.append(label)
+    #metadesc.append("Keywörter ges: " + str(len(m.data.keys())))
+    #metadesc.append("Anzahl Objekte ges: " + str(m.numberOfObjects))
+    #for md in metadesc:    
+    #    label = Label(infoFrame, text=md)
+    #    label.pack()
+    #    labels.append(label)
     root.update()
     canvas.configure(scrollregion = (canvas.bbox('all')))
 
