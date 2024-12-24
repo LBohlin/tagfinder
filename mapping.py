@@ -39,8 +39,9 @@ class Mapping:
                                     self.sparam[picpath] = SecParam()
                                 self.sparam[picpath].date = date
 
+                            # no continue, the date is supposed to work as a search parameter
                             # else if other command chars
-                            continue
+                            
                         
                         if l in self.data:
                             s = self.data.get(l)
