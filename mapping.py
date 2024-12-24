@@ -70,20 +70,10 @@ class Mapping:
                 for k in foundKeywords:
                     metalist.append(sublist)
                     imageSet = set.intersection(*metalist)
-            # generalisation for more search parameters should be added here
-            sortlist = list()
-            for i in imageSet:
-                if i in self.sparam:
-                    entry = [i,self.sparam[i].date]
-                else:
-                    entry = [i,datetime.date(3000,1,1)]
-                sortlist.append(entry)
-                print(entry)
-            sortlist.sort(key=lambda x: x[1])
             results = list()
-            # remove the secondary parameters needed for sorting
-            for e in sortlist:
-                results.append(e[0])                
+            for i in imageSet:
+                results.append(i)
+            results.sort(reverse=True,key=lambda x: datetime.date(1,1,1) if x not in self.sparam else self.sparam[x].date)
         return results
                 
     def printdata(self):
