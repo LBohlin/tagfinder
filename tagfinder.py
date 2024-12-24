@@ -60,15 +60,13 @@ def searchFunction():
     pictures = []
     labels = []
 
-    ret = m.search(searchKeys)
-    imageSet = ret[0]
-    metadesc = ret[1]
+    results = m.search(searchKeys)    
     x = 0
     y = 0
     height = 150
     dist = 70
     maxwidth = 800
-    for img in imageSet:        
+    for img in results:        
         if x > maxwidth:
             y = y + height + dist
             x = 0
@@ -88,12 +86,6 @@ def searchFunction():
         wdth=label.winfo_reqwidth()
         labels.append(label)
         x = x + wdth
-    #metadesc.append("Keywörter ges: " + str(len(m.data.keys())))
-    #metadesc.append("Anzahl Objekte ges: " + str(m.numberOfObjects))
-    #for md in metadesc:    
-    #    label = Label(infoFrame, text=md)
-    #    label.pack()
-    #    labels.append(label)
     root.update()
     canvas.configure(scrollregion = (canvas.bbox('all')))
 

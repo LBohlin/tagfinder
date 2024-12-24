@@ -3,6 +3,7 @@ This is a quick and dirty prototype to allow tagging of arbitrary folders with k
 
 ## function
 The program uses find to search for files named info.txt and associates included keywords with a preview picture (represented by a symbolic link named pic).
+To allow sorting the results by date add a line "!d:DD.MM.YYYY" to the info.txt.
 
 ## dependencies
 The program is written in python3 and uses tkinter, pil and pil.imagetk. dep.sh can be used to install the needed dependencies on debian(bookworm).
