@@ -69,6 +69,8 @@ for p in paths:
     print("Neustes gefundenes Bild: "+str(symlinkTarget))
     if symlinkTarget:        
         linkPath.symlink_to(symlinkTarget.resolve())
+    else:
+        infoFile.write("nopic\n")
     timetag = "$d:" + str(oldestModDate.day) + '.' + str(oldestModDate.month) + '.' + str(oldestModDate.year)
     infoFile.write(timetag)
     infoFile.close()
