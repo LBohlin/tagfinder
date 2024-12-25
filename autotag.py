@@ -25,12 +25,10 @@ for ft in fileTypes:
                     if p.parent.name == sf:
                         p = p.parent
         paths.add(p.parent)
-
-print(paths)
         
 for p in paths:
     infoPath = p.joinpath("info.txt")
-    linkPath =p.joinpath("pic")
+    linkPath = p.joinpath("pic")
     if (os.path.exists(infoPath)):
         info = open(infoPath, "r")
         if info.readline()[:9] == TAG:
@@ -51,8 +49,8 @@ for p in paths:
     newestModDate = datetime.date(3000,1,1)
     symlinkDate = datetime.date(1,1,1)
     symlinkTarget = None
-    print("Gefundene Files: ")
-    print(files)
+    #print("Gefundene Files: ")
+    #print(files)
     for f in files:
         name = f.name
         infoFile.write(str(name)+'\n')
@@ -71,7 +69,7 @@ for p in paths:
         linkPath.symlink_to(symlinkTarget.resolve())
     else:
         infoFile.write("nopic\n")
-    timetag = "$d:" + str(oldestModDate.day) + '.' + str(oldestModDate.month) + '.' + str(oldestModDate.year)
+    timetag = "$d:" + str(oldestModDate.day) + '.' + str(oldestModDate.month) + '.' + str(oldestModDate.year) + '\n'
     infoFile.write(timetag)
     infoFile.close()
              
