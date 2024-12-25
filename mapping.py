@@ -57,20 +57,36 @@ class Mapping:
     def search(self, searchKeys):
         metalist = []
         imageSet = {}
+        notSearchedKeys = []        
+        results = []
+        for k in searchKeys:
+            if k[0] == '!':
+                notSearchedKeys.append(k[1:])
+        if (len(searchKeys) == len(notSearchedKeys)):
+            searchKeys.append('*')
         searchKeys=list(filter(None, searchKeys))
-        for sk in searchKeys:        
-            sublist = set()
+        # create a set of !searched keywords to exclude
+        notSearchedSet = set()
+        for nsk in notSearchedKeys:
+            for k in self.data.keys():
+                if nsk in k:
+                    for p in self.data[k]:
+                        notSearchedSet.add(p)
+        for sk in searchKeys:
+            # if !sk don't waste time
+            if sk[0] == '!':
+                continue
+            resultSet = set()
             foundKeywords = []
             for k in self.data.keys():            
                 if sk == '*' or sk in k:
                     for p in self.data[k]:
-                        sublist.add(p)
+                        resultSet.add(p)
                     foundKeywords.append(k)
             if len(foundKeywords) > 0:
                 # number of pictures NOT of keywords!!
-                desc = sk + ": "+ str(len(sublist)) + ' ('
-                for k in foundKeywords:
-                    metalist.append(sublist)
+                for k in foundKeywords:                    
+                    metalist.append(resultSet-notSearchedSet)
                     imageSet = set.intersection(*metalist)
             results = list()
             for i in imageSet:

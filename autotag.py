@@ -46,6 +46,7 @@ for p in paths:
         files.extend([x for x in p.joinpath(sf).glob('*')])
     infoFile = open(infoPath,'a')
     infoFile.write(TAG+'\n')
+    infoFile.write(str(p.name) + '\n')
     oldestModDate = datetime.date(1,1,1)
     newestModDate = datetime.date(3000,1,1)
     symlinkDate = datetime.date(1,1,1)
