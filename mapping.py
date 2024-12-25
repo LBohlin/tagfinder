@@ -12,6 +12,8 @@ class Mapping:
         self.data = dict()
         #map paths to secondary parameters:
         self.sparam = dict()
+        # possible names of subfolders
+        self.SUBFOLDERS = ["files", "images"]
 
         self.basePath=path
         locations = subprocess.run(["find", path, "-name", "info.txt"], capture_output=True).stdout.decode("utf-8")
@@ -29,8 +31,8 @@ class Mapping:
                         # evaluate command characters
                         if l[0] == '#':
                             continue
-                        # ! is treated as a character to allow special properties
-                        if l[0] == '!':
+                        # $ is treated as a character to allow special properties
+                        if l[0] == '$':
                             # date syntax "!d:DD.MM.YYYY
                             if l[1] == 'd':
                                 dateComp = l.split(':')[1].split('.')
