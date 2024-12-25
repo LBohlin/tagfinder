@@ -14,7 +14,7 @@ config = f.readline()
 path = config.replace('\n','')
 f.close()
           
-fileTypes = ["*.gif", "*.jpg", "*.png", "*.stl"]
+fileTypes = ["*.gif", "*.jpg", "*.png", "*.stl", "*.3mf", "*.zip"]
 paths = set()
 for ft in fileTypes:
     l = subprocess.run(["find", path, "-name", ft], capture_output=True).stdout.decode("utf-8")    
