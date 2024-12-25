@@ -1,3 +1,4 @@
+import subprocess
 from tkinter import *
 from PIL import ImageTk, Image
 from pathlib import Path
@@ -21,9 +22,6 @@ vbar.pack(side = RIGHT, fill = Y)
 vbar.config(command = canvas.yview)
 canvas.config(yscrollcommand=vbar.set)
 
-
-#infoFrame = Frame(canvas, width = 50, height = 100, bg='grey')
-#infoFrame.pack(side='right')
 configpath = Path("./config.txt")
 
 if  (not configpath.exists()) or (not Path("./error.jpeg").exists()):
@@ -47,8 +45,13 @@ def on_mousewheel(event):
 root.bind("<Button-4>", on_mousewheel)
 root.bind("<Button-5>", on_mousewheel)
 
+
+def open_caja(path):
+    path = path.resolve()
+    subprocess.run(["caja", path])        
+
 def searchFunction():
-    global canvas, root
+    global canvas, root    
     searchKeys = searchEntry.get().lower().split(' ')
     if len(list(filter(None,searchKeys))) < 1:
         return
@@ -59,19 +62,18 @@ def searchFunction():
     global pictures
     pictures = []
     labels = []
-
     results = m.search(searchKeys)    
     x = 0
     y = 0
     height = 150
     dist = 70
-    maxwidth = 800
+    maxwidth = 800    
     for img in results:        
         if x > maxwidth:
             y = y + height + dist
             x = 0
             
-        ppath = Path(img).parent        
+        ppath = Path(img).parent
         if not img.exists():            
             img = Path("./error.jpeg")
         temp = Image.open(img)
@@ -80,15 +82,19 @@ def searchFunction():
         temp = temp.resize((int(relative*height), height))
         image = ImageTk.PhotoImage(temp)                
         pictures.append(image)        
-        label = Label(canvas, text=str(ppath).replace(m.basePath,"")[1:], image=image, compound='top')        
-        label.pack()
-        canvas.create_window(x,y,window=label, anchor=NW)
+        label = Label(canvas, text=str(ppath).replace(m.basePath,"")[1:], image=image, compound='top')
+        label.bind("<Button-1>", lambda x, y=ppath:open_caja(y))
+        label.pack()        
+        w = canvas.create_window(x,y,window=label, anchor=NW)
         wdth=label.winfo_reqwidth()
+        hgth=label.winfo_reqheight()
+        label.config(width=wdth, height=hgth)
         labels.append(label)
+        canvas.pack(expand=True, fill=BOTH)
         x = x + wdth
     root.update()
     canvas.configure(scrollregion = (canvas.bbox('all')))
-
+    
 searchEntry = Entry(searchFrame, bd=3)
 searchEntry.pack()
 
@@ -97,7 +103,5 @@ searchButton.pack()
 root.bind('<Return>', lambda enter: searchButton.invoke())
 searchEntry.focus_set()
 #m.printdata()
-
-
 
 root.mainloop()
