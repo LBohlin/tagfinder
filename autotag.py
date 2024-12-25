@@ -1,5 +1,6 @@
 import subprocess, sys, os, datetime
 from pathlib import Path
+SUBFOLDERS = ["files", "images"]
 
 TAG="$AUTOTAG$"
 PICFORMATS=[".gif", ".jpg", ".png"]
@@ -16,10 +17,14 @@ f.close()
 fileTypes = ["*.gif", "*.jpg", "*.png", "*.stl"]
 paths = set()
 for ft in fileTypes:
-    l = subprocess.run(["find", path, "-name", ft], capture_output=True).stdout.decode("utf-8")
-    objects = list(filter(None,l.split('\n')))
+    l = subprocess.run(["find", path, "-name", ft], capture_output=True).stdout.decode("utf-8")    
+    objects = list(filter(None,l.split('\n')))    
     for o in objects:
-        paths.add(Path(o).parent)
+        p = Path(o)
+        for sf in SUBFOLDERS:
+                    if p.parent.name == sf:
+                        p = p.parent
+        paths.add(p.parent)
 
 print(paths)
         
@@ -37,6 +42,8 @@ for p in paths:
             # don't generate a tag if info.txt without autotag keyword exists
             continue
     files = [x for x in p.glob('*')]
+    for sf in SUBFOLDERS:
+        files.extend([x for x in p.joinpath(sf).glob('*')])
     infoFile = open(infoPath,'a')
     infoFile.write(TAG+'\n')
     oldestModDate = datetime.date(1,1,1)
@@ -61,7 +68,7 @@ for p in paths:
     print("Neustes gefundenes Bild: "+str(symlinkTarget))
     if symlinkTarget:        
         linkPath.symlink_to(symlinkTarget.resolve())
-    timetag = "!d:" + str(oldestModDate.day) + '.' + str(oldestModDate.month) + '.' + str(oldestModDate.year)
+    timetag = "$d:" + str(oldestModDate.day) + '.' + str(oldestModDate.month) + '.' + str(oldestModDate.year)
     infoFile.write(timetag)
     infoFile.close()
              
